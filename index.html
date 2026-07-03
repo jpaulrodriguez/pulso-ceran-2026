@@ -128,6 +128,18 @@
   .panel-sub-grid{grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:26px; padding-top:20px; border-top:1px solid var(--border);}
   .panel-quote{grid-column:1/-1; margin-top:8px; padding-top:20px; border-top:1px solid var(--border); font-size:14.5px; font-style:italic; color:var(--text-secondary);}
   .panel-quote span{color:var(--text); font-style:normal; font-weight:500;}
+  .process-strip{grid-column:1/-1; margin-top:8px; padding-top:20px; border-top:1px solid var(--border);}
+  .process-strip-title{font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:18px;}
+  .process-flow{display:flex; align-items:flex-start; flex-wrap:wrap; gap:4px; row-gap:16px;}
+  .p-step{display:flex; flex-direction:column; align-items:center; text-align:center; width:98px; flex-shrink:0;}
+  .p-step-icon{width:32px; height:32px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border-strong); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px; margin-bottom:8px; color:var(--text-secondary);}
+  .p-step-label{font-size:11.5px; color:var(--text-secondary); line-height:1.35;}
+  .p-arrow{color:var(--text-tertiary); font-size:16px; flex-shrink:0; padding-top:6px;}
+  .p-final{display:flex; flex-direction:column; align-items:center; text-align:center; width:150px; flex-shrink:0; padding:10px 10px; border-radius:14px; background:color-mix(in srgb, var(--panel-accent) 15%, transparent); border:1px solid var(--panel-accent);}
+  .p-final-icon{width:32px; height:32px; border-radius:10px; background:var(--panel-accent); color:#0D1526; display:flex; align-items:center; justify-content:center; margin-bottom:8px;}
+  .p-final-icon svg{width:16px; height:16px;}
+  .p-final-tag{font-size:9.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--panel-accent); margin-bottom:4px;}
+  .p-final-label{font-size:12px; font-weight:500; color:var(--text); line-height:1.3;}
   .fade{animation:fadeIn .45s ease both;}
   @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
 
@@ -268,6 +280,10 @@
           <div class="panel-block ai"><div class="lbl">Cómo se usa la IA</div><p id="panel-ai"></p></div>
         </div>
         <div class="panel-quote" id="panel-quote"></div>
+        <div class="process-strip">
+          <div class="process-strip-title">Paso a paso de la herramienta</div>
+          <div class="process-flow" id="process-flow"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -292,6 +308,8 @@ const acts = {
     data: 'El Key Visual y guidelines de marca, información pública de cada ciudad, y referencias de marcas competidoras.',
     ai: 'La IA arma cada pieza combinando lo fijo de marca con lo propio de cada ciudad, y revisa el texto contra los claims médicos ya aprobados antes de pasar a la aprobación humana.',
     quote: '"Este Key Visual no se copia y se traduce cien veces. Se descompone en lo que nunca cambia y lo que sí cambia, y armamos la combinación correcta cada vez."',
+    steps: ['Ingesta del Key Visual', 'Ingesta de contexto cultural y digital', 'Generación de piezas por ciudad', 'Validación de compliance (MLR)', 'Aprobación humana por país'],
+    deliverable: 'Piezas aprobadas, listas por ciudad y canal',
     bpm: 68, dur: 2.2,
     file: 'Pulso_ActoI_Propuesta_Herramienta.md',
     proposalMd: `# PULSO — ACTO I: PULSO EN REPOSO
@@ -344,6 +362,8 @@ Pulso · CERAN 2026 · Documento de trabajo interno`
     data: 'Conversación pública y búsquedas por ciudad (listening + Apify), tendencias de Google y el calendario cultural de cada país.',
     ai: 'La IA detecta la tendencia y arma la pieza. Antes de generar, una persona confirma que la tendencia le sirve a la marca; antes de publicar, la pieza pasa por el mismo filtro de compliance y una segunda aprobación humana.',
     quote: '"El pulso no solo se mantiene, se acelera cuando algo importa. Y se acelera rápido porque no empieza de cero cada vez."',
+    steps: ['Detección de tendencia', 'Validación humana de fit de marca', 'Generación exprés de la pieza', 'Compliance + aprobación final'],
+    deliverable: 'Pieza de tendencia publicada en minutos',
     bpm: 136, dur: 0.9,
     file: 'Pulso_ActoII_Propuesta_Herramienta.md',
     proposalMd: `# PULSO — ACTO II: PULSO ACELERADO
@@ -397,6 +417,8 @@ Pulso · CERAN 2026 · Documento de trabajo interno`
     data: 'Desempeño histórico de contenido por ciudad y marca, cruzado con el contexto cultural de cada mercado.',
     ai: 'La IA identifica qué contenido funcionó mejor, evalúa si aplica a otra ciudad (tropicalización), y ajusta sola la cadencia y mezcla de la próxima parrilla.',
     quote: '"Lo que funciona en una ciudad no se queda ahí. El sistema lo aprende, lo tropicaliza y lo lleva a las otras dos — el pulso no solo se sostiene, se vuelve más inteligente con cada ciclo."',
+    steps: ['Captura de desempeño histórico', 'Análisis de qué funcionó y por qué', 'Evaluación de tropicalización', 'Recálculo de la parrilla siguiente'],
+    deliverable: 'Plan de contenido del próximo mes, ajustado con datos',
     bpm: 84, dur: 1.7,
     file: 'Pulso_ActoIII_Propuesta_Herramienta.md',
     proposalMd: `# PULSO — ACTO III: PULSO QUE APRENDE Y ESCALA
@@ -494,6 +516,15 @@ function selectAct(id) {
   document.getElementById('panel-data').textContent = a.data;
   document.getElementById('panel-ai').textContent = a.ai;
   document.getElementById('panel-quote').innerHTML = a.quote;
+
+  const flow = document.getElementById('process-flow');
+  let flowHtml = '';
+  a.steps.forEach(function (step, i) {
+    flowHtml += '<div class="p-step"><div class="p-step-icon">' + (i + 1) + '</div><div class="p-step-label">' + step + '</div></div>';
+    flowHtml += '<div class="p-arrow">&#8594;</div>';
+  });
+  flowHtml += '<div class="p-final"><div class="p-final-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div><div class="p-final-tag">Entregable final</div><div class="p-final-label">' + a.deliverable + '</div></div>';
+  flow.innerHTML = flowHtml;
 
   const grid = document.getElementById('panel-grid');
   grid.classList.remove('fade');
