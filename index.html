@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulso — CERAN 2026 · Fase de Entendimiento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070B19;
+    --card:#121A2F;
+    --card-soft:#0D1526;
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.18);
+    --text:#F5F6FA;
+    --text-secondary:#9AA3B8;
+    --text-tertiary:#6B7488;
+    --orange:#FF7A00;
+    --green:#00D26A;
+    --orange-soft:rgba(255,122,0,0.12);
+    --green-soft:rgba(0,210,106,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:radial-gradient(circle at 15% 0%, #0d1730 0%, var(--bg) 45%);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 32px;}
+
+  nav{position:sticky; top:0; z-index:50; background:rgba(7,11,25,0.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--border);}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:16px; padding-bottom:16px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:18px; letter-spacing:0.02em;}
+  .brand .dot{width:9px; height:9px; border-radius:50%; background:var(--orange); box-shadow:0 0 0 4px var(--orange-soft); animation:pulseDot 1.6s ease-in-out infinite;}
+  @keyframes pulseDot{0%,100%{transform:scale(1); opacity:1;} 50%{transform:scale(1.4); opacity:.6;}}
+  .navlinks{display:flex; gap:28px;}
+  .navlinks a{color:var(--text-secondary); text-decoration:none; font-size:13px; font-weight:500; transition:color .2s;}
+  .navlinks a:hover{color:var(--orange);}
+
+  header.hero{padding:64px 0 40px;}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--orange); background:var(--orange-soft); border:1px solid rgba(255,122,0,0.3); border-radius:999px; padding:6px 14px; margin-bottom:24px;}
+  h1.title{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(40px, 7vw, 68px); letter-spacing:-0.02em; line-height:1; background:linear-gradient(180deg, #ffffff 0%, #b9c2d8 100%); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:18px;}
+  .tagline{font-size:18px; color:var(--text-secondary); max-width:600px; font-weight:400;}
+  .tagline em{color:var(--text); font-style:normal; font-weight:500;}
+
+  .phase-banner{margin-top:36px; background:var(--card); border:1px solid var(--border-strong); border-radius:20px; padding:24px 28px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; position:relative; overflow:hidden;}
+  .phase-banner::before{content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:var(--orange);}
+  .phase-step{padding-left:6px;}
+  .phase-step .num{font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:700; color:var(--text-tertiary); margin-bottom:6px;}
+  .phase-step.active .num{color:var(--orange);}
+  .phase-step h4{font-size:14.5px; font-weight:600; margin-bottom:6px;}
+  .phase-step p{font-size:12.5px; color:var(--text-secondary);}
+  .phase-step.active h4::after{content:'ahora'; margin-left:8px; font-size:10px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; background:var(--orange); color:#1a0d00; padding:2px 8px; border-radius:999px; vertical-align:middle;}
+  .phase-step.locked{opacity:0.4;}
+
+  section{padding:56px 0;}
+  .section-head{margin-bottom:36px; max-width:680px;}
+  .section-head .kicker{font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--green); margin-bottom:10px;}
+  .section-head h2{font-family:'Space Grotesk', sans-serif; font-size:30px; font-weight:700; margin-bottom:12px; letter-spacing:-0.01em;}
+  .section-head p{color:var(--text-secondary); font-size:15.5px;}
+
+  /* MONITOR */
+  .monitor{background:var(--card); border:1px solid var(--border-strong); border-radius:24px; padding:8px; margin-bottom:28px;}
+  .monitor-top{display:flex; align-items:center; justify-content:space-between; padding:14px 20px 4px;}
+  .live{display:flex; align-items:center; gap:7px;}
+  .live .reddot{width:7px; height:7px; border-radius:50%; background:#FF5A5A; animation:blink 1.4s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:1;} 50%{opacity:.25;}}
+  .live span{font-size:11px; color:var(--text-tertiary); letter-spacing:0.03em;}
+  .bpm{display:flex; align-items:center; gap:8px;}
+  .bpm svg{width:16px; height:16px;}
+  #bpm-val{font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--orange);}
+  .bpm span.lbl{font-size:11px; color:var(--text-tertiary);}
+  #pulse-svg{width:100%; height:220px; display:block; cursor:default;}
+  .marker{cursor:pointer;}
+  .marker circle.ring{transition:r .2s ease, fill-opacity .2s ease;}
+  .marker:hover circle.ring{fill-opacity:0.35;}
+  .marker text{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px;}
+  .monitor-legend{display:flex; justify-content:center; gap:28px; padding:6px 20px 18px;}
+  .leg-item{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-secondary); cursor:pointer; padding:6px 12px; border-radius:999px; transition:background .2s;}
+  .leg-item .sw{width:10px; height:10px; border-radius:50%;}
+  .leg-item.a1 .sw{background:var(--orange);}
+  .leg-item.a2 .sw{background:#FF5A5A;}
+  .leg-item.a3 .sw{background:var(--green);}
+  .leg-item.active{background:rgba(255,255,255,0.06); color:var(--text);}
+
+  /* AUDIT BAND */
+  .audit-band{background:var(--card); border:1px dashed var(--border-strong); border-radius:16px; padding:20px 24px; margin-bottom:28px;}
+  .audit-band-top{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
+  .audit-band .icon-wrap{width:36px; height:36px; border-radius:10px; background:rgba(133,146,246,0.14); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .audit-band .icon-wrap svg{width:18px; height:18px;}
+  .audit-band-text{font-size:13.5px; color:var(--text-secondary);}
+  .audit-band-text strong{color:var(--text); font-weight:600;}
+  .audit-track{display:flex; align-items:center; gap:0; margin-bottom:14px;}
+  .audit-track .line{flex:1; height:1px; background:var(--border-strong);}
+  .audit-dot{width:8px; height:8px; border-radius:50%; background:#8592F6; flex-shrink:0;}
+  .audit-chips{display:flex; gap:10px; flex-wrap:wrap;}
+  .audit-chip{font-size:11.5px; color:#8592F6; background:rgba(133,146,246,0.12); border:1px solid rgba(133,146,246,0.3); padding:5px 12px; border-radius:999px; font-weight:500;}
+
+  /* DETAIL PANEL */
+  .panel{background:var(--card); border:1px solid var(--border-strong); border-radius:22px; padding:32px 34px; position:relative; overflow:hidden;}
+  .panel::before{content:''; position:absolute; top:0; left:0; width:100%; height:4px; background:var(--panel-accent, var(--orange)); transition:background .3s ease;}
+  .panel-head{display:flex; align-items:center; gap:16px; margin-bottom:22px; flex-wrap:wrap;}
+  .download-btn{
+    display:flex; align-items:center; gap:8px; font-family:'Inter',sans-serif; font-size:12.5px; font-weight:500;
+    color:var(--text); background:rgba(255,255,255,0.04); border:1px solid var(--border-strong); border-radius:10px;
+    padding:9px 16px; cursor:pointer; transition:background .2s ease, border-color .2s ease, transform .15s ease;
+  }
+  .download-btn svg{width:15px; height:15px; flex-shrink:0;}
+  .download-btn:hover{background:rgba(255,255,255,0.08); border-color:var(--orange); transform:translateY(-1px);}
+  .tool-tag{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:500; color:var(--orange); background:var(--orange-soft); border:1px solid rgba(255,122,0,0.3); border-radius:999px; padding:4px 12px; margin-top:8px;}
+  .tool-tag i{font-style:normal; font-size:12px;}
+  .panel-badge{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:var(--orange-soft); color:var(--orange); flex-shrink:0; transition:background .3s ease, color .3s ease;}
+  #panel-name{font-size:19px; font-weight:600;}
+  #panel-sub{font-size:13.5px; color:var(--text-secondary); margin-top:2px;}
+  .panel-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:26px;}
+  .panel-block .lbl{font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:10px; opacity:0.85;}
+  .panel-block.what .lbl{color:#8592F6;}
+  .panel-block.goal .lbl{color:var(--orange);}
+  .panel-block.value .lbl{color:var(--green);}
+  .panel-block.data .lbl{color:#4FD1C5;}
+  .panel-block.ai .lbl{color:#C084FC;}
+  .panel-block p{font-size:14px; color:var(--text-secondary);}
+  .panel-sub-grid{grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:26px; padding-top:20px; border-top:1px solid var(--border);}
+  .panel-quote{grid-column:1/-1; margin-top:8px; padding-top:20px; border-top:1px solid var(--border); font-size:14.5px; font-style:italic; color:var(--text-secondary);}
+  .panel-quote span{color:var(--text); font-style:normal; font-weight:500;}
+  .fade{animation:fadeIn .45s ease both;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+  .pending-list{display:flex; flex-direction:column; gap:10px;}
+  .pending-item{display:flex; gap:14px; align-items:flex-start; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px 18px;}
+  .pending-item .marker2{width:20px; height:20px; border-radius:6px; border:1.5px solid var(--orange); flex-shrink:0; margin-top:2px;}
+  .pending-item p{font-size:13.5px; color:var(--text-secondary);}
+  .pending-item strong{color:var(--text); font-weight:500;}
+
+  footer{padding:36px 0 56px; text-align:center;}
+  footer p{color:var(--text-tertiary); font-size:13px;}
+
+  @media (max-width:860px){
+    .phase-banner{grid-template-columns:1fr;}
+    .panel-grid{grid-template-columns:1fr;}
+    .navlinks{display:none;}
+    .monitor-legend{flex-wrap:wrap; gap:10px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>PULSO</div>
+    <div class="navlinks">
+      <a href="#actos">Los 3 actos</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">CERAN 2026 · L'Oréal · CeraVe / Garnier / Vogue</span>
+    <h1 class="title">Pulso</h1>
+    <p class="tagline">El sistema que hace que un Key Visual siga vivo, en cada ciudad, todos los días: <em>un solo motor que escala, reacciona y aprende</em>, a tres ritmos distintos.</p>
+  </div>
+</header>
+
+<section id="actos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Haz clic en cada punto del pulso</div>
+      <h2>Un mismo sistema, tres ritmos</h2>
+      <p>Cada punto de la línea es un momento del pitch. Al hacer clic se abre qué vamos a hacer ahí, qué objetivo del brief cubre y cómo le da valor a la propuesta.</p>
+    </div>
+
+    <div class="monitor">
+      <div class="monitor-top">
+        <div class="live"><span class="reddot"></span><span>monitor en vivo</span></div>
+        <div class="bpm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span id="bpm-val">68</span><span class="lbl">pulso</span>
+        </div>
+      </div>
+
+      <svg id="pulse-svg" viewBox="0 0 680 200">
+        <defs>
+          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M20 0 L0 0 0 20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1">
+              <animate attributeName="stroke-opacity" values="0.4;0.12;0.4" dur="3s" repeatCount="indefinite"></animate>
+            </path>
+            <animate attributeName="x" from="0" to="20" dur="2.6s" repeatCount="indefinite"></animate>
+          </pattern>
+        </defs>
+        <rect x="0" y="0" width="680" height="200" fill="url(#grid)"></rect>
+
+        <path id="seg1" d="M0,110 L27,98 L55,122 L82,98 L110,122 L137,98 L165,122 L192,98 L220,110" fill="none" stroke="var(--orange)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="transition:stroke .3s ease, stroke-width .3s ease;"></path>
+        <path id="seg2" d="M220,110 L240,110 L250,85 L258,35 L266,175 L274,120 L282,110 L300,110 L320,110 L330,85 L338,35 L346,175 L354,120 L362,110 L380,110 L400,110 L420,110 L440,110 L460,110" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:stroke .3s ease, stroke-width .3s ease;"></path>
+        <path id="seg3" d="M460,110 L487,92 L515,128 L542,92 L570,128 L597,92 L625,128 L652,92 L680,110" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:stroke .3s ease, stroke-width .3s ease;"></path>
+
+        <g id="dot-wrap"></g>
+
+        <g class="marker" id="mk-1" onclick="selectAct(1)">
+          <circle class="ring" cx="110" cy="60" r="22" fill="var(--orange)" fill-opacity="0.18"></circle>
+          <circle cx="110" cy="60" r="15" fill="#0D1526" stroke="var(--orange)" stroke-width="2"></circle>
+          <text x="110" y="65" text-anchor="middle" fill="var(--orange)">I</text>
+        </g>
+        <g class="marker" id="mk-2" onclick="selectAct(2)">
+          <circle class="ring" cx="340" cy="60" r="22" fill="#FF5A5A" fill-opacity="0.18"></circle>
+          <circle cx="340" cy="60" r="15" fill="#0D1526" stroke="#FF5A5A" stroke-width="2"></circle>
+          <text x="340" y="65" text-anchor="middle" fill="#FF5A5A">II</text>
+        </g>
+        <g class="marker" id="mk-3" onclick="selectAct(3)">
+          <circle class="ring" cx="570" cy="60" r="22" fill="var(--green)" fill-opacity="0.18"></circle>
+          <circle cx="570" cy="60" r="15" fill="#0D1526" stroke="var(--green)" stroke-width="2"></circle>
+          <text x="570" y="65" text-anchor="middle" fill="var(--green)">III</text>
+        </g>
+      </svg>
+
+      <div class="monitor-legend">
+        <div class="leg-item a1 active" id="leg-1" onclick="selectAct(1)"><span class="sw"></span>Pulso en reposo</div>
+        <div class="leg-item a2" id="leg-2" onclick="selectAct(2)"><span class="sw"></span>Pulso acelerado</div>
+        <div class="leg-item a3" id="leg-3" onclick="selectAct(3)"><span class="sw"></span>Pulso que aprende</div>
+      </div>
+    </div>
+
+    <div class="audit-band">
+      <div class="audit-band-top">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#8592F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <div class="audit-band-text"><strong>Auditoría con IA especializada (tipo MLR)</strong> — no es un modelo genérico opinando sobre el contenido. Es una IA entrenada y limitada a la base de conocimiento del negocio central de cada marca, para que nunca diga algo que no esté ya aprobado.</div>
+      </div>
+      <div class="audit-track">
+        <div class="audit-dot"></div>
+        <div class="line"></div>
+        <div class="audit-dot"></div>
+        <div class="line"></div>
+        <div class="audit-dot"></div>
+      </div>
+      <div class="audit-chips">
+        <span class="audit-chip">CeraVe · modelo médico-legal (claims dermocosméticos aprobados)</span>
+        <span class="audit-chip">Garnier · modelo de compliance cosmético estándar</span>
+        <span class="audit-chip">Vogue · modelo editorial de tono y guidelines de marca</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-badge" id="panel-badge">I</div>
+        <div style="flex:1;">
+          <div id="panel-name">Pulso en reposo</div>
+          <div id="panel-sub">Desafío 1 · Creación a escala · 30 min</div>
+          <span class="tool-tag"><i>&#9881;</i>Herramienta a desarrollar: <span id="panel-toolname">Motor de escalamiento cultural</span></span>
+        </div>
+        <button class="download-btn" onclick="downloadProposal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Descargar propuesta de herramienta
+        </button>
+      </div>
+      <div class="panel-grid" id="panel-grid">
+        <div class="panel-block what"><div class="lbl">Qué vamos a hacer</div><p id="panel-what"></p></div>
+        <div class="panel-block goal"><div class="lbl">Objetivo que cubre</div><p id="panel-goal"></p></div>
+        <div class="panel-block value"><div class="lbl">Cómo da valor</div><p id="panel-value"></p></div>
+        <div class="panel-sub-grid">
+          <div class="panel-block data"><div class="lbl">Qué datos usamos</div><p id="panel-data"></p></div>
+          <div class="panel-block ai"><div class="lbl">Cómo se usa la IA</div><p id="panel-ai"></p></div>
+        </div>
+        <div class="panel-quote" id="panel-quote"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Pulso · CERAN 2026 · Documento de trabajo interno</p>
+  </div>
+</footer>
+
+<script>
+const acts = {
+  1: {
+    badge: 'I', color: 'var(--orange)',
+    name: 'Pulso en reposo',
+    sub: 'Desafío 1 · Creación a escala · 30 min',
+    toolName: 'Motor de escalamiento cultural',
+    what: 'Construir la herramienta que toma 1 Key Visual y genera automáticamente sus versiones para Bogotá, Lima y Panamá, sin perder la esencia de marca.',
+    goal: 'Responde el Desafío 1: escalar un KV a cientos de piezas, con relevancia cultural y control legal en cada país.',
+    value: 'Le prueba al cliente que no improvisamos: hay una herramienta real detrás, no un equipo armando piezas a mano una por una.',
+    data: 'El Key Visual y guidelines de marca, información pública de cada ciudad, y referencias de marcas competidoras.',
+    ai: 'La IA arma cada pieza combinando lo fijo de marca con lo propio de cada ciudad, y revisa el texto contra los claims médicos ya aprobados antes de pasar a la aprobación humana.',
+    quote: '"Este Key Visual no se copia y se traduce cien veces. Se descompone en lo que nunca cambia y lo que sí cambia, y armamos la combinación correcta cada vez."',
+    bpm: 68, dur: 2.2,
+    file: 'Pulso_ActoI_Propuesta_Herramienta.md',
+    proposalMd: `# PULSO — ACTO I: PULSO EN REPOSO
+## Creación a escala (Desafío #1) — Propuesta de herramienta
+
+## 1. Estructura del proceso
+
+1. Ingesta del Key Visual maestro + guidelines de marca -> repositorio de activos fijos
+2. Ingesta de contexto cultural/consumo por ciudad -> fuentes abiertas + estudios del cliente
+3. Descomposición del KV en 3 capas: fija / semi-fija / variable (diseño atómico)
+4. Generación de variantes por ciudad, canal y objetivo -> Agente de Ensamblaje + Agente de Copy
+5. Validación de cumplimiento legal/médico -> Agente de Cumplimiento (modelo tipo MLR)
+6. Checkpoint de aprobación humana por país
+7. Entrega/publicación con trazabilidad completa
+
+## 2. Qué se procesa
+
+- Activos fijos de marca: logo, paleta, tipografía, producto hero — se reutilizan, no se recalculan.
+- Variables por ciudad: escena, casting, luz, copy — generadas según insight de consumo local.
+- Reglas de cumplimiento: lista cerrada de claims aprobados por el laboratorio.
+
+## 3. Procesamiento y tecnología a implementar
+
+| Componente | Tecnología propuesta | Notas |
+|---|---|---|
+| Orquestación de agentes | WPP Open | Motor central del flujo entre agentes |
+| Repositorio de activos | DAM conectado a WPP Open | Fuente única de verdad del KV |
+| Generación/composición visual | Modelo de imagen bajo contrato empresarial de la agencia | Usar solo lo ya licenciado |
+| Generación de copy | LLM empresarial dentro de WPP Open o vía API con acuerdo de datos | Revisado por el Agente de Cumplimiento |
+| Motor de cumplimiento (MLR) | RAG cerrado: base vectorial de claims aprobados + LLM restringido | No consulta internet abierto |
+| Trazabilidad | Logging de aprobaciones (quién, cuándo, qué versión de claim) | Requisito de gobernanza |
+
+## 4. Consideración de implementación
+
+Mostrar output real requiere el Key Visual entregado por el cliente y la base de claims
+aprobados. Sin esos dos insumos, esta fase se presenta como arquitectura validada, no como
+demo funcional.
+
+---
+Pulso · CERAN 2026 · Documento de trabajo interno`
+  },
+  2: {
+    badge: 'II', color: '#FF5A5A',
+    name: 'Pulso acelerado',
+    sub: 'Desafío 2 · Trend hacking en tiempo real · 10 min',
+    toolName: 'Motor de trend hacking',
+    what: 'Construir la herramienta que detecta una tendencia real y la convierte en pieza publicada en minutos, con dos chequeos humanos en el camino.',
+    goal: 'Responde el Desafío 2: escuchar, aprobar y activar una tendencia rápido, sin perder el control.',
+    value: 'Prueba que la velocidad no significa saltarse aprobaciones — es la misma herramienta del Acto I, funcionando más rápido.',
+    data: 'Conversación pública y búsquedas por ciudad (listening + Apify), tendencias de Google y el calendario cultural de cada país.',
+    ai: 'La IA detecta la tendencia y arma la pieza. Antes de generar, una persona confirma que la tendencia le sirve a la marca; antes de publicar, la pieza pasa por el mismo filtro de compliance y una segunda aprobación humana.',
+    quote: '"El pulso no solo se mantiene, se acelera cuando algo importa. Y se acelera rápido porque no empieza de cero cada vez."',
+    bpm: 136, dur: 0.9,
+    file: 'Pulso_ActoII_Propuesta_Herramienta.md',
+    proposalMd: `# PULSO — ACTO II: PULSO ACELERADO
+## Trend hacking en tiempo real (Desafío #2) — Propuesta de herramienta
+
+## 1. Estructura del proceso
+
+1. Monitoreo continuo (listening licenciado) + captura complementaria vía Apify
+2. Cálculo de umbral señal vs. ruido (volumen + velocidad de crecimiento)
+3. Contraste con Google Trends y calendario cultural/estacional
+4. Chequeo humano continuo de fit de marca (antes de generar nada)
+5. Generación de la pieza (Agente de Ensamblaje + Agente de Copy, sobre templates pre-aprobados del Acto I)
+6. Validación de cumplimiento (mismo motor MLR del Acto I, a minutos)
+7. Chequeo humano final (antes de publicar)
+8. Publicación
+
+## 2. Qué se procesa
+
+- Señal cruda de conversación pública: hashtags, menciones, búsqueda, por ciudad y categoría.
+- Intención de búsqueda: cruce con Google Trends para confirmar interés real, no solo ruido.
+- Fit de marca: evaluación humana rápida — el sistema acelera la preparación, no reemplaza el criterio.
+
+## 3. Procesamiento y tecnología a implementar
+
+| Componente | Tecnología propuesta | Notas |
+|---|---|---|
+| Listening consolidado | Herramienta ya licenciada por la agencia | Confirmar cuál está activa |
+| Captura de señal cruda | Apify — actores programados sobre hashtags, competencia y búsquedas | Solo datos públicos, nunca cuentas propias |
+| Cálculo de umbral | Regla simple sobre series de tiempo (volumen + derivada) | No requiere ML complejo en esta fase |
+| Cruce de intención | Google Trends (interfaz pública o actor de Apify) | Validación cruzada, no fuente primaria |
+| Generación rápida | Mismos agentes del Acto I, sobre templates pre-aprobados | Reutilización de infraestructura |
+| Canal de aprobación exprés | Integración con canal directo (ej. Slack/Teams) | Reduce fricción sin eliminar el paso humano |
+
+## 4. Consideración de implementación
+
+Este acto no funciona de forma independiente: su velocidad depende de que el Acto I ya tenga
+construidos los templates pre-aprobados y el motor de cumplimiento. Es la misma inversión de
+la Fase 1, corriendo más rápido.
+
+---
+Pulso · CERAN 2026 · Documento de trabajo interno`
+  },
+  3: {
+    badge: 'III', color: 'var(--green)',
+    name: 'Pulso que aprende y escala',
+    sub: 'Desafío 3 · Aprendizaje continuo y regionalización · 10 min',
+    toolName: 'Motor de aprendizaje y regionalización',
+    what: 'Construir la herramienta que aprende qué contenido funciona y lo replica —tropicalizado— en otras ciudades y marcas, en vez de partir de cero cada vez. Garnier Colombia es solo el primer caso de uso.',
+    goal: 'Responde el Desafío 3: sostener el plan de contenido con datos reales, no con intuición.',
+    value: 'El sistema mejora solo con cada mes: lo que funciona en una ciudad eleva el desempeño de las otras dos.',
+    data: 'Desempeño histórico de contenido por ciudad y marca, cruzado con el contexto cultural de cada mercado.',
+    ai: 'La IA identifica qué contenido funcionó mejor, evalúa si aplica a otra ciudad (tropicalización), y ajusta sola la cadencia y mezcla de la próxima parrilla.',
+    quote: '"Lo que funciona en una ciudad no se queda ahí. El sistema lo aprende, lo tropicaliza y lo lleva a las otras dos — el pulso no solo se sostiene, se vuelve más inteligente con cada ciclo."',
+    bpm: 84, dur: 1.7,
+    file: 'Pulso_ActoIII_Propuesta_Herramienta.md',
+    proposalMd: `# PULSO — ACTO III: PULSO QUE APRENDE Y ESCALA
+## Aprendizaje continuo y regionalización (Desafío #3) — Propuesta de herramienta
+
+## 1. Estructura del proceso
+
+1. Captura de performance histórico por pieza (Graph API): formato, tipo, ciudad, resultado
+2. Agente de Aprendizaje: identifica qué combinaciones tuvieron mejor resultado
+3. Evaluación de tropicalización: ¿el hallazgo es replicable en otro mercado o es exclusivo de esa ciudad? (cruce con contexto cultural)
+4. Generación de recomendación de cadencia/mezcla/formato para el ciclo siguiente
+5. Traducción a brief accionable (Agente de Brief)
+6. Producción/adaptación a escala (reutiliza agentes del Acto I)
+7. Publicación -> nueva captura de performance (cierre del ciclo)
+
+## 2. Qué se procesa
+
+- Performance histórico: qué formato, tipo de contenido y ciudad generó mejor resultado.
+- Contexto cultural cruzado: para decidir si un hallazgo exitoso es tropicalizable a otra ciudad o es exclusivo.
+- Recomendación de ciclo siguiente: cambia según lo que realmente funcionó, no es una regla fija.
+
+## 3. Procesamiento y tecnología a implementar
+
+| Componente | Tecnología propuesta | Notas |
+|---|---|---|
+| Captura de performance | Instagram Graph API (cuentas propias) | Fuente primaria de este acto |
+| Almacenamiento histórico | Base de datos ligera de performance por pieza/ciudad/formato | No requiere infraestructura pesada al inicio |
+| Modelo de aprendizaje | Fase inicial: reglas estadísticas simples. Fase madura: modelo de recomendación más sofisticado | No sobre-invertir en ML antes de tener 2-3 ciclos de data real |
+| Evaluación de tropicalización | Cruce de reglas + contexto cultural, con asistencia de LLM para la primera lectura | El LLM propone, el equipo estratégico decide |
+| Salida del proceso | Recomendación estructurada que alimenta el Agente de Brief del Acto I | Mismo pipeline de generación, insumo distinto |
+
+## 4. Consideración de implementación
+
+El valor real depende de acumular al menos 2-3 ciclos de data histórica. Se recomienda iniciar
+la captura de datos cuanto antes, aunque el modelo de aprendizaje empiece como reglas simples.
+El diagnóstico de Garnier es la primera aplicación de este proceso, no el proceso en sí.
+
+---
+Pulso · CERAN 2026 · Documento de trabajo interno`
+  }
+};
+
+let currentBpm = 68;
+let currentActId = 1;
+
+function animateCounter(to) {
+  const el = document.getElementById('bpm-val');
+  const from = currentBpm;
+  const start = performance.now();
+  const duration = 500;
+  function step(now) {
+    const p = Math.min(1, (now - start) / duration);
+    el.textContent = Math.round(from + (to - from) * p);
+    if (p < 1) requestAnimationFrame(step);
+    else currentBpm = to;
+  }
+  requestAnimationFrame(step);
+}
+
+function drawPath(id) {
+  const path = document.getElementById(id);
+  const len = path.getTotalLength();
+  path.style.transition = 'none';
+  path.setAttribute('stroke-dasharray', len);
+  path.setAttribute('stroke-dashoffset', len);
+  path.getBoundingClientRect();
+  path.style.transition = 'stroke-dashoffset .7s ease, stroke .3s ease, stroke-width .3s ease';
+  path.setAttribute('stroke-dashoffset', '0');
+}
+
+function selectAct(id) {
+  const a = acts[id];
+  currentActId = id;
+
+  for (let i = 1; i <= 3; i++) {
+    const seg = document.getElementById('seg' + i);
+    const active = i === id;
+    seg.setAttribute('stroke', active ? a.color : 'rgba(255,255,255,0.18)');
+    seg.setAttribute('stroke-width', active ? '4' : '2');
+    if (!active) { seg.removeAttribute('stroke-dasharray'); seg.removeAttribute('stroke-dashoffset'); }
+    document.getElementById('leg-' + i).classList.toggle('active', active);
+  }
+  drawPath('seg' + id);
+
+  document.getElementById('panel-badge').textContent = a.badge;
+  document.getElementById('panel-badge').style.background = a.color + '22';
+  document.getElementById('panel-badge').style.color = a.color;
+  document.querySelector('.panel').style.setProperty('--panel-accent', a.color);
+  document.getElementById('panel-name').textContent = a.name;
+  document.getElementById('panel-sub').textContent = a.sub;
+  document.getElementById('panel-toolname').textContent = a.toolName;
+  document.getElementById('panel-what').textContent = a.what;
+  document.getElementById('panel-goal').textContent = a.goal;
+  document.getElementById('panel-value').textContent = a.value;
+  document.getElementById('panel-data').textContent = a.data;
+  document.getElementById('panel-ai').textContent = a.ai;
+  document.getElementById('panel-quote').innerHTML = a.quote;
+
+  const grid = document.getElementById('panel-grid');
+  grid.classList.remove('fade');
+  void grid.offsetWidth;
+  grid.classList.add('fade');
+
+  animateCounter(a.bpm);
+
+  const dotWrap = document.getElementById('dot-wrap');
+  dotWrap.innerHTML = '<circle r="6" fill="' + a.color + '"><animateMotion dur="' + a.dur + 's" repeatCount="indefinite"><mpath href="#seg' + id + '"></mpath></animateMotion></circle>';
+}
+
+function downloadProposal() {
+  const a = acts[currentActId];
+  const blob = new Blob([a.proposalMd], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = a.file;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+selectAct(1);
+</script>
+
+</body>
+</html>
