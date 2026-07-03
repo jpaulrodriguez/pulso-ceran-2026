@@ -131,9 +131,14 @@
   .process-strip{grid-column:1/-1; margin-top:8px; padding-top:20px; border-top:1px solid var(--border);}
   .process-strip-title{font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:18px;}
   .process-flow{display:flex; align-items:flex-start; flex-wrap:wrap; gap:4px; row-gap:16px;}
-  .p-step{display:flex; flex-direction:column; align-items:center; text-align:center; width:98px; flex-shrink:0;}
-  .p-step-icon{width:32px; height:32px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border-strong); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px; margin-bottom:8px; color:var(--text-secondary);}
-  .p-step-label{font-size:11.5px; color:var(--text-secondary); line-height:1.35;}
+  .p-step{display:flex; flex-direction:column; align-items:center; text-align:center; width:112px; flex-shrink:0;}
+  .p-step-icon{width:32px; height:32px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border-strong); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px; margin-bottom:8px; color:var(--text-secondary); position:relative;}
+  .p-step-icon.is-ai{border-color:#C084FC;}
+  .p-step-icon.is-human{border-color:var(--text-tertiary);}
+  .p-step-label{font-size:11.5px; color:var(--text-secondary); line-height:1.35; margin-bottom:6px;}
+  .p-step-tag{font-size:9px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:2px 7px; border-radius:6px; display:inline-block; white-space:nowrap;}
+  .p-step-tag.ai{color:#C084FC; background:rgba(192,132,252,0.14);}
+  .p-step-tag.human{color:var(--text-tertiary); background:rgba(255,255,255,0.07);}
   .p-arrow{color:var(--text-tertiary); font-size:16px; flex-shrink:0; padding-top:6px;}
   .p-final{display:flex; flex-direction:column; align-items:center; text-align:center; width:150px; flex-shrink:0; padding:10px 10px; border-radius:14px; background:color-mix(in srgb, var(--panel-accent) 15%, transparent); border:1px solid var(--panel-accent);}
   .p-final-icon{width:32px; height:32px; border-radius:10px; background:var(--panel-accent); color:#0D1526; display:flex; align-items:center; justify-content:center; margin-bottom:8px;}
@@ -308,7 +313,13 @@ const acts = {
     data: 'El Key Visual y guidelines de marca, información pública de cada ciudad, y referencias de marcas competidoras.',
     ai: 'La IA arma cada pieza combinando lo fijo de marca con lo propio de cada ciudad, y revisa el texto contra los claims médicos ya aprobados antes de pasar a la aprobación humana.',
     quote: '"Este Key Visual no se copia y se traduce cien veces. Se descompone en lo que nunca cambia y lo que sí cambia, y armamos la combinación correcta cada vez."',
-    steps: ['Ingesta del Key Visual', 'Ingesta de contexto cultural y digital', 'Generación de piezas por ciudad', 'Validación de compliance (MLR)', 'Aprobación humana por país'],
+    steps: [
+      { label: 'Ingesta del Key Visual', agent: 'Agente de Brief', human: false },
+      { label: 'Ingesta de contexto cultural y digital', agent: 'Agente de Brief', human: false },
+      { label: 'Generación de piezas por ciudad', agent: 'Agentes de Ensamblaje + Copy', human: false },
+      { label: 'Validación de compliance (MLR)', agent: 'Agente de Cumplimiento', human: false },
+      { label: 'Aprobación por país', agent: 'Humano', human: true }
+    ],
     deliverable: 'Piezas aprobadas, listas por ciudad y canal',
     bpm: 68, dur: 2.2,
     file: 'Pulso_ActoI_Propuesta_Herramienta.md',
@@ -362,7 +373,13 @@ Pulso · CERAN 2026 · Documento de trabajo interno`
     data: 'Conversación pública y búsquedas por ciudad (listening + Apify), tendencias de Google y el calendario cultural de cada país.',
     ai: 'La IA detecta la tendencia y arma la pieza. Antes de generar, una persona confirma que la tendencia le sirve a la marca; antes de publicar, la pieza pasa por el mismo filtro de compliance y una segunda aprobación humana.',
     quote: '"El pulso no solo se mantiene, se acelera cuando algo importa. Y se acelera rápido porque no empieza de cero cada vez."',
-    steps: ['Detección de tendencia', 'Validación humana de fit de marca', 'Generación exprés de la pieza', 'Compliance + aprobación final'],
+    steps: [
+      { label: 'Detección de tendencia', agent: 'Listening + Apify', human: false },
+      { label: 'Validación de fit de marca', agent: 'Humano', human: true },
+      { label: 'Generación exprés de la pieza', agent: 'Agentes de Ensamblaje + Copy', human: false },
+      { label: 'Validación de compliance', agent: 'Agente de Cumplimiento', human: false },
+      { label: 'Aprobación final', agent: 'Humano', human: true }
+    ],
     deliverable: 'Pieza de tendencia publicada en minutos',
     bpm: 136, dur: 0.9,
     file: 'Pulso_ActoII_Propuesta_Herramienta.md',
@@ -417,7 +434,13 @@ Pulso · CERAN 2026 · Documento de trabajo interno`
     data: 'Desempeño histórico de contenido por ciudad y marca, cruzado con el contexto cultural de cada mercado.',
     ai: 'La IA identifica qué contenido funcionó mejor, evalúa si aplica a otra ciudad (tropicalización), y ajusta sola la cadencia y mezcla de la próxima parrilla.',
     quote: '"Lo que funciona en una ciudad no se queda ahí. El sistema lo aprende, lo tropicaliza y lo lleva a las otras dos — el pulso no solo se sostiene, se vuelve más inteligente con cada ciclo."',
-    steps: ['Captura de desempeño histórico', 'Análisis de qué funcionó y por qué', 'Evaluación de tropicalización', 'Recálculo de la parrilla siguiente'],
+    steps: [
+      { label: 'Captura de desempeño histórico', agent: 'Extracción automatizada (Graph API)', human: false },
+      { label: 'Análisis de qué funcionó y por qué', agent: 'Agente de Aprendizaje', human: false },
+      { label: 'Evaluación de tropicalización', agent: 'Agente de Aprendizaje', human: false },
+      { label: 'Validación estratégica', agent: 'Humano', human: true },
+      { label: 'Recálculo de la parrilla siguiente', agent: 'Agente de Brief', human: false }
+    ],
     deliverable: 'Plan de contenido del próximo mes, ajustado con datos',
     bpm: 84, dur: 1.7,
     file: 'Pulso_ActoIII_Propuesta_Herramienta.md',
@@ -520,7 +543,9 @@ function selectAct(id) {
   const flow = document.getElementById('process-flow');
   let flowHtml = '';
   a.steps.forEach(function (step, i) {
-    flowHtml += '<div class="p-step"><div class="p-step-icon">' + (i + 1) + '</div><div class="p-step-label">' + step + '</div></div>';
+    var iconClass = step.human ? 'is-human' : 'is-ai';
+    var tagClass = step.human ? 'human' : 'ai';
+    flowHtml += '<div class="p-step"><div class="p-step-icon ' + iconClass + '">' + (i + 1) + '</div><div class="p-step-label">' + step.label + '</div><span class="p-step-tag ' + tagClass + '">' + step.agent + '</span></div>';
     flowHtml += '<div class="p-arrow">&#8594;</div>';
   });
   flowHtml += '<div class="p-final"><div class="p-final-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div><div class="p-final-tag">Entregable final</div><div class="p-final-label">' + a.deliverable + '</div></div>';
